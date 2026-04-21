@@ -3,15 +3,22 @@ pipeline {
 
     stages {
 
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t devops-app .'
+                bat 'docker build -t devops-app .'
             }
         }
 
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 5000:5000 devops-app'
+                bat 'docker rm -f devops-app || exit 0'
+                bat 'docker run -d -p 5000:5000 --name devops-app devops-app'
             }
         }
     }
